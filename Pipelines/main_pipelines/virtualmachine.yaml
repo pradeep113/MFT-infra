@@ -1,0 +1,29 @@
+trigger:
+- master
+
+name: Deploy virtualmachine Bicep file
+
+variables:
+  vmImageName: 'ubuntu-latest'
+
+  azureServiceConnection: '2f571c43-a917-4964-bc96-73739a4f058e'
+  resourceGroupName: 'practise-ci-dev-app-rg-01'
+  location: 'centralindia'
+  templateFile: './Biceps/modules/virtualmachine/virtualmachine.bicep'
+pool:
+  vmImage: $(vmImageName)
+  workspace:
+    clean: all
+
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    useGlobalConfig: false
+    inlineScript: |
+      az --version
+      az group create --name $(resourceGroupName) --location $(location)
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile)

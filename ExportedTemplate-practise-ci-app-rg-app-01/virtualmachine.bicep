@@ -31,7 +31,7 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2022-05-0
     ]
   }
 }
-resource virtualNetworkName 'Microsoft.Network/virtualNetworks@2022-05-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
   name: virtualNetworkName
   location: location
   properties: {
@@ -66,10 +66,10 @@ resource nic 'Microsoft.Network/networkInterfaces@2022-09-01' = {
     ]
   }
   dependsOn:[
-    virtualNetworkName
+    virtualNetwork
   ]
 }
-resource vnName 'Microsoft.Compute/virtualMachines@2022-11-01' = {
+resource vmName 'Microsoft.Compute/virtualMachines@2022-11-01' = {
   name: vmName
   location: location
   tags: {
@@ -93,7 +93,7 @@ resource vnName 'Microsoft.Compute/virtualMachines@2022-11-01' = {
       }
       osDisk: {
         osType: 'Linux'
-        name: '${virtualMachines_practiselciappdev001_name}_OsDisk_1_63fabfd433e2456793a6999f327a919e'
+        name: '${vmName}_OsDisk_1_63fabfd433e2456793a6999f327a919e'
         createOption: 'FromImage'
         caching: 'ReadWrite'
         managedDisk: {
@@ -104,7 +104,7 @@ resource vnName 'Microsoft.Compute/virtualMachines@2022-11-01' = {
       dataDisks: []
     }
     osProfile: {
-      computerName: virtualMachines_practiselciappdev001_name
+      computerName: vmName
       adminUsername: 'mftvmadmin'
       linuxConfiguration: {
         disablePasswordAuthentication: false
@@ -122,7 +122,7 @@ resource vnName 'Microsoft.Compute/virtualMachines@2022-11-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: networkInterfaces_practiselciappdev001892_externalid
+          id: nic.id
           properties: {
             deleteOption: 'Delete'
           }

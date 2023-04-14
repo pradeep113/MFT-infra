@@ -1,3 +1,4 @@
+param vmName string = 'myvm'
 @description('Location for all resources.')
 param location string = resourceGroup().location
 

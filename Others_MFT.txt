@@ -1,0 +1,9 @@
+Example syntax of the HTTPS string to send via email to open a populated secure form:
+
+<a href = https://samgademo.pro2col.com/form/TestHTTPS?&SubmittedBy=${userName}&userEmail=${userEmail}> Click here to approve, amend or reject </a>
+
+
+TestHTTPS is the form to be opened
+
+Submitted by and userEmail are the form fields to populate and the ${} content is the data entry from the first form.
+_____________________________________________________________________________________________________________________________________________

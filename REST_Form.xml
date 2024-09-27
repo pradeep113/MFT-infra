@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="REST_Form" mainModule="Main" version="2.0" logLevel="verbose">
+	<variable name="SubmittedBy" value="Samantha Fry" />
+	<variable name="EmpNo" value="12345678" />
+	<variable name="userEmail" value="sam.fry@abc.com" />
+
+	<module name="Main">
+
+		<createWorkspace version="1.0" />
+
+
+		<restGet resourceId="samgademo" uri="/SubmitData/payload" responseBodyDestination="file" responseBodyFile="body" whenResponseBodyFileExists="overwrite" statusCodeVariable="status" version="1.0" />
+
+
+		<print version="1.0">
+			<![CDATA[~~~~~~~~~~~~~~~~~~~~~~~
+Status: ${status}
+
+~~~~~~~~~~~~~~~~~~~~~~~
+]]>
+		</print>
+
+
+		<setVariable label="Set Variable - uploadFileLink" name="uploadFileLink" inputFile="body" version="2.0">
+			<ParsedValueVariable jsonParsePath="/data/uploadFileLink" componentHeader="JSON" />
+		</setVariable>
+
+
+		<setVariable label="Set Variable - payloadId" name="payloadId" inputFile="body" version="2.0">
+			<ParsedValueVariable jsonParsePath="/data/payloadId" componentHeader="JSON" />
+		</setVariable>
+
+
+		<print version="1.0">
+			<![CDATA[${payloadId}
+${uploadFileLink}
+]]>
+		</print>
+
+
+		<setVariable name="uploadFileLink" value="${Replace(UploadFileLink, &apos;https://samgademo.pro2col.com/rest/forms/v1&apos;, &apos;&apos;)}" version="2.0" />
+
+
+		<restMultipartPost resourceId="samgademo" uri="${uploadFileLink}" contentType="multipart/form-data" version="1.0" disabled="false">
+			<part label="text part" inputFile="C:\Program Files\HelpSystems\GoAnywhere\userdata\documents\Payroll\Mapper\Payroll_File_Match.csv" contentType="text/plain" contentDisposition="form-data" name="name">
+			</part>
+		</restMultipartPost>
+
+
+		<restPost resourceId="samgademo" uri="SubmitData/payload/${payloadId}/submit" version="1.0">
+			<content>{
+   &quot;SubmittedBy&quot; :&quot;${SubmittedBy}&quot;,
+   &quot;EmpNo&quot; : &quot;${EmpNo}&quot;,
+  &quot;userEmail&quot; : &quot;${userEmail}&quot;
+}</content>
+		</restPost>
+
+
+		<deleteWorkspace version="1.0" />
+
+	</module>
+
+	<description>Submit the secure form used earlier via REST commands in a Project (Bypass the Web Client)</description>
+</project>
